@@ -8,7 +8,11 @@ const PORT = process.env.PORT || 3001;
 
 // Serve landing page
 app.get("/", (req, res) => {
-  res.send("<h2>hello there</h2>");
+  res.status(200).send("<h2>hello there</h2>");
+});
+
+app.get("/greet", (req, res) => {
+  res.status(200).send({ message: "hello there" });
 });
 
 app.listen(PORT, () => {
