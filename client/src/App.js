@@ -6,6 +6,10 @@ class App extends Component {
     greeting: "fun"
   };
 
+  componentDidMount() {
+    this.helloWorld();
+  }
+
   helloWorld = () => {
     return fetch("/greet", {
       headers: {
@@ -25,7 +29,6 @@ class App extends Component {
   };
 
   render() {
-    this.helloWorld();
     return <div className="App">{this.state.greeting}</div>;
   }
 }
