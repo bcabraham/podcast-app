@@ -60,6 +60,7 @@ const log = data => {
     console.log("Error saving data", data); //eslint-disable-line no-console
     dataString = e;
   }
+  // eslint-disable-next-line no-console
   console.log(
     `[${data.severity}] ${data.logDate}: ${data.source} - ${data.message}`
   );

@@ -1,5 +1,4 @@
 const express = require("express");
-const axios = require("axios");
 
 const { utils } = require("./utils/utils");
 const { Logger } = require("./utils/logger");
