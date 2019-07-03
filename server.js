@@ -3,6 +3,7 @@ const axios = require("axios");
 
 const { utils } = require("./utils/utils");
 const { Logger } = require("./utils/logger");
+const { apple_service } = require("./service/apple.service");
 
 require("dotenv").config();
 
@@ -28,67 +29,26 @@ app.get("/greet", (req, res) => {
 });
 
 app.get("/search", (req, res) => {
-  Logger.debug("/search", "/search/req", req.body);
+  Logger.debug("/search GET", "req", req.body);
 
   let { searchTerm } = req.body;
 
-  Logger.debug("/search/searchTerm", searchTerm, "");
+  Logger.debug("/search GET", `searchTerm: ${searchTerm}`, "");
 
-  let reqURL = `https://itunes.apple.com/search?term=${encodeURIComponent(
-    searchTerm
-  )}&entity=podcast&media=podcast`;
-
-  Logger.debug("/search/reqURL", reqURL, "");
-
-  axios.get(reqURL).then(response => {
-    let results = response.data.results;
-
-    if (results && results.length > 0) {
-      const podcasts = results.map(item => {
-        const {
-          collectionId,
-          artistName,
-          feedUrl,
-          artworkUrl30,
-          artworkUrl60,
-          artworkUrl100,
-          genreIds,
-          genres
-        } = utils.pick(item, [
-          "collectionId",
-          "artistName",
-          "feedUrl",
-          "artworkUrl30",
-          "artworkUrl60",
-          "artworkUrl100",
-          "genreIds",
-          "genres"
-        ]);
-
-        return {
-          collectionId,
-          artistName,
-          feedUrl,
-          artworkUrl30,
-          artworkUrl60,
-          artworkUrl100,
-          genreIds,
-          genres
-        };
-      }, []);
-
-      Logger.debug("/search/podcasts", "Success", podcasts);
-
-      res.status(200).send(podcasts);
-    } else if (results.length === 0) {
-      Logger.debug("/search/podcasts", "no results found", "");
-
-      res.status(404).send();
-    } else {
-      Logger.debug("/search", "bad request", "");
-      res.status(400).send();
-    }
-  });
+  apple_service
+    .searchPodcast(searchTerm)
+    .then(response => {
+      if (response && response.success) {
+        Logger.debug("/search GET", response.status, response.podcasts);
+        res.status(response.status).send(response.podcasts);
+      } else {
+        Logger.debug("/search GET", response.status, response.message);
+        res.status(response.status).send(response.message);
+      }
+    })
+    .catch(err => {
+      Logger.error("/search GET", "Error processing request", err);
+    });
 });
 
 app.listen(PORT, () => {
