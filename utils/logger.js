@@ -68,10 +68,34 @@ const log = data => {
   module.exports.Logger.stream.write(dataString + "\n");
 };
 
+const write = data => {
+  let dataString;
+  try {
+    dataString = String(data);
+  } catch (e) {
+    console.log("Error saving data", data); //eslint-disable-line no-console
+    dataString = e;
+  }
+
+  module.exports.Logger.stream.write(dataString + "\n");
+};
+
+const info = data => {
+  let dataString;
+  try {
+    dataString = String(data);
+    console.log(dataString); //eslint-disable-line no-console
+  } catch (e) {
+    console.log("Error displaying data"); //eslint-disable-line no-console
+  }
+};
+
 module.exports.Logger = {
   init,
   debug,
   error,
   warn,
-  log
+  log,
+  write,
+  info
 };
