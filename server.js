@@ -1,8 +1,8 @@
 const express = require("express");
 
-const { utils } = require("./utils/utils");
+// const { utils } = require("./utils/utils");
 const { Logger } = require("./utils/logger");
-const { apple_service } = require("./service/apple.service");
+const { apple_service: search_service } = require("./service/search.service");
 
 require("dotenv").config();
 
@@ -10,6 +10,7 @@ Logger.init(process.env.LOG_FILE_PATH);
 
 var app = express();
 
+// Middleware
 app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
@@ -27,26 +28,51 @@ app.get("/greet", (req, res) => {
   res.status(200).send({ message: "hello there" });
 });
 
-app.get("/search", (req, res) => {
-  Logger.debug("/search GET", "req", req.body);
+app.get("/searchPodcast", (req, res) => {
+  Logger.debug("/searchPodcast GET", "req", req.body);
 
   let { searchTerm } = req.body;
 
-  Logger.debug("/search GET", `searchTerm: ${searchTerm}`, "");
+  Logger.debug("/searchPodcast GET", `searchTerm: ${searchTerm}`, "");
 
-  apple_service
+  search_service
     .searchPodcast(searchTerm)
     .then(response => {
+      Logger.debug("/searchPodcast GET", response.status, response.message);
+
       if (response && response.success) {
-        Logger.debug("/search GET", response.status, response.podcasts);
-        res.status(response.status).send(response.podcasts);
+        res.status(response.status).send(response.data);
       } else {
-        Logger.debug("/search GET", response.status, response.message);
         res.status(response.status).send(response.message);
       }
     })
     .catch(err => {
-      Logger.error("/search GET", "Error processing request", err);
+      Logger.error("/searchPodcast GET", "Error processing request", err);
+      res.status(500).send("An error occurred");
+    });
+});
+
+app.get("/searchRSSFeed", (req, res) => {
+  Logger.debug("/searchRSSFeed GET", "req", req.body);
+
+  let { feedUrl } = req.body;
+
+  Logger.debug("/searchRSSFeed GET", `feedUrl: ${feedUrl}`, "");
+
+  search_service
+    .searchRSSFeed(feedUrl)
+    .then(response => {
+      Logger.debug("/searchRSSFeed GET", response.status, response.message);
+
+      if (response && response.success) {
+        res.status(response.status).send(response.data);
+      } else {
+        res.status(response.status).send(response.message);
+      }
+    })
+    .catch(err => {
+      Logger.error("/searchRSSFeed GET", "Error processing request", err);
+      res.status(500).send("An error occurred");
     });
 });
 
