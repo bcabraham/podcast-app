@@ -11,13 +11,16 @@
     "mongoose": "^5.6.6",
     "morgan": "^1.9.1",
     "rss-parser": "^3.7.2",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "snyk": "^1.199.2"
   },
   "scripts": {
     "start": "node ./src",
     "test": "jest",
     "dev": "nodemon -i \"*.test.js\" -i \"playground/\" ./src",
-    "lint": "eslint --fix src"
+    "lint": "eslint --fix src",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "jest": {
     "testEnvironment": "node",
@@ -40,5 +43,6 @@
   "bugs": {
     "url": "https://github.com/bcabraham/podcast-app/issues"
   },
-  "homepage": "https://github.com/bcabraham/podcast-app#readme"
+  "homepage": "https://github.com/bcabraham/podcast-app#readme",
+  "snyk": true
 }
