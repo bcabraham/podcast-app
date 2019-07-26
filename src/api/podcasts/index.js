@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const { searchPodcast, searchRSSFeed } = require("../../services/search.service");
 
-router.get("/searchPodcast", (req, res) => {
+router.get("/search", (req, res) => {
   const { searchTerm } = req.body;
 
   searchPodcast(searchTerm)
@@ -18,7 +18,7 @@ router.get("/searchPodcast", (req, res) => {
     });
 });
 
-router.get("/searchRSSFeed", (req, res) => {
+router.get("/searchRSS", (req, res) => {
   const { feedUrl } = req.body;
 
   searchRSSFeed(feedUrl)

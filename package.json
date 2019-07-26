@@ -16,7 +16,7 @@
   "scripts": {
     "start": "node ./src",
     "test": "jest",
-    "dev": "nodemon -i \"*.test.js\" ./src",
+    "dev": "nodemon -i \"*.test.js\" -i \"playground/\" ./src",
     "lint": "eslint --fix src"
   },
   "jest": {

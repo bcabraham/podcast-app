@@ -1,4 +1,3 @@
-console.log("load express");
 const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
@@ -24,6 +23,10 @@ module.exports = (args) => {
   }
 
   // routes
+  app.get("/", (req, res) => {
+    res.status(200).send("<h3>server is up</h3>");
+  });
+
   app.use("/api", api);
   app.use(notFound);
   app.use(errorHandler);

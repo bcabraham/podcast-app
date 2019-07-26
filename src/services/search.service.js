@@ -74,7 +74,7 @@ const searchPodcast = (searchTerm) => {
     .catch(err => ({
       success: false,
       status: 500,
-      message: "Error",
+      message: err.message,
       data: [],
     }));
 };
@@ -95,7 +95,7 @@ const searchRSSFeed = feedUrl => parser
   .catch(err => ({
     success: false,
     status: 500,
-    message: "Error",
+    message: err.message,
     data: [],
   }));
 

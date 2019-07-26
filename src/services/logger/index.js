@@ -14,7 +14,7 @@ const logger = createLogger({
     }),
     new transports.File({
       format: decolorizedJson,
-      filename: "logs/combined.log",
+      filename: "logs/server.log",
     }),
   ],
 });
@@ -30,9 +30,11 @@ if (process.env.NODE_ENV !== "production") {
     }),
   );
 }
-module.exports = logger;
-module.exports.stream = {
+
+const stream = {
   write: (message, encoding) => {
     logger.info(message.substring(0, message.lastIndexOf("\n")));
   },
 };
+
+module.exports = { logger, stream };
